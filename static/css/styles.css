@@ -1,0 +1,369 @@
+body {
+	position: absolute;
+  background: rgb(247, 247, 252);
+  font-family: 'Roboto', sans-serif;
+  min-width: 975px;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-section-decoration-element {
+	position: absolute;
+	top: 0;
+	left: 0;
+  width: 100%;
+  height: 380px;
+  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.main-container {	
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	z-index: 1;
+	flex-direction: column;
+}
+
+.navbar {
+	width: 80%;
+	min-height: 70px;
+	align-items: center;
+	justify-content: space-between;
+	color: white;
+	display: flex;
+}
+.navbar__logo-and-text {
+	display: flex;
+	flex-wrap: nowrap;
+}
+.navbar__wrapper {
+	display: flex
+}
+
+.nav-button--std {
+	margin: 0 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.nav-button--sign-up {
+	padding: 7px 10px;
+	margin: 0 10px;
+	cursor: pointer;
+	border-radius: 20px;
+	color: #764ba2;
+	background-color: white;
+	border: 1px solid white;
+	transition: all .2s ease-in-out;
+}
+
+.nav-button--sign-up:hover {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+	transition: all .2s ease-in-out;
+  transform: translate(0, -1px)
+}
+
+.steps-box {
+  width: 875px;
+  height: 545px;
+  min-width: 875px;
+  min-height: 500px;
+  background-color: #fdfdfd;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 18px 35px rgba(50,50,93,.1), 0 8px 15px rgba(0,0,0,.07);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.emoji-filler {
+	font-size: 65px;
+}
+
+/*Loader*/
+
+.spinner-container {
+	width: 100%;
+	height: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading-indicator__text {
+	color: #717171;
+	font-size: 18px;
+	margin-top: 30px;
+}
+
+.spinner {
+  width: 115px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 25px;
+  height: 25px;
+  margin: 0 5px;
+  background-color: #667eea;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2)
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+.step {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.step-title {
+	font-size: 24px;
+	font-weight: normal;
+  margin-bottom: 5px;
+  margin-top: 35px;
+  color: #525252;
+}
+
+/*Welcome step*/
+
+.welcome-title {
+	font-size: 24px;
+	font-weight: normal;
+  color: #525252;
+}
+
+.welcome-step__text-box {
+	width: 85%;
+	font-size: 16px;
+	font-weight: 300;
+	color: #717171;
+}
+
+.welcome-step {
+	width: 100%;
+	height: 60%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.get-started-button {
+	width: 120px;
+	height: 30px;
+	padding: 10px;
+	color: white;
+	border-radius: 5px;
+	background-color: #FF6384;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all .2s ease-in-out;
+}
+
+.upload-button {
+	width: 120px;
+	height: 30px;
+	padding: 10px;
+	color: white;
+	border-radius: 5px;
+	background-color: #FF6384;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all .2s ease-in-out;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+.predict-button {
+	width: 120px;
+	height: 30px;
+	padding: 10px;
+	color: white;
+	border-radius: 5px;
+	background-color: #FF6384;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all .2s ease-in-out;
+	margin-bottom: 10px;
+	margin-top: 35px;
+}
+
+.predict-button:hover, .upload-button:hover, .get-started-button:hover {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+	transition: all .2s ease-in-out;
+  transform: translate(0, -1px)
+}
+
+/*Upload step*/
+
+.drop-zone {
+	width: 80%;
+	height: 55%;
+	border-radius: 10px;
+	border: 2px dashed #7171a6;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.drop-zone__prompt {
+	font-size: 24px;
+	font-weight: normal;
+	margin: 15px;
+	color: #525252;
+}
+
+.drop-zone__sub-prompt {
+	font-size: 16px;
+	font-weight: 300;
+	color: #525252;
+	cursor: pointer;
+}
+
+.uploaded-step__text-box, .upload-step__text-box {
+	width: 85%;
+	font-size: 16px;
+	font-weight: 300;
+	color: #717171;
+	margin: 15px;
+}
+
+.uploaded-step__summary-container {
+	width: 85%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.success-step__summary-container {
+	width: 85%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.summary-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.summary-item__description {
+	color: #b8b8d9;
+	font-size: 12px;
+}
+
+.summary-item__value {
+	color: #7171a6;
+	font-size: 25px;
+	font-weight: 700;
+}
+
+.variable-select-container {
+	display: flex;
+	width: 85%;
+	align-items: center;
+	justify-content: space-around;
+	flex-basis: 30%;
+	border-radius: 10px;
+	border: 2px dashed #7171a6;
+}
+
+.variable-select-container--warning {
+	border: 2px dashed #FF6384;
+}
+
+.select-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.select-label {
+	color: #717171;
+	font-size: 17px;
+}
+/*Steps indicator*/
+
+.step-indicator-container {
+	width: 140px;
+	display: flex;
+	justify-content: space-between;
+	margin: 30px 0;
+}
+
+.indicator {
+	width: 15px;
+	height: 15px;
+	margin: 0 5px;
+	background-color: #ccc;
+	border-radius: 100%;
+}
+
+.indicator.indicator--active {
+	background-color: #667eea
+}
+
+#chart {
+	margin-top: -40px;
+}
+
+.footer {
+	width: 80%;
+	height: 70px;
+	align-items: center;
+	justify-content: center;
+	color: #717171;
+	display: flex;
+}

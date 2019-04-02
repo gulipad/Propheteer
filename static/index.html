@@ -1,31 +1,200 @@
 <!doctype html>
 
-<html ng-app="todoApp">
+<html ng-app="propheteer">
 
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-  <script src="static/app.js"></script>
-  <link rel="stylesheet" href="static/styles.css">
+  <meta charset='utf-8'>
+  <!-- <link href='https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' rel='stylesheet' type='text/css'> -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+  <script src="static/libs/lodash/lodash.min.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+  <script src='https://d3js.org/d3.v4.min.js' charset='utf-8'></script>
+  <script src="static/libs/metricsgraphics/metricsgraphics.min.js"></script>
+  <link rel="stylesheet" href="static/css/styles.css">
+  <link rel="stylesheet" href="static/libs/metricsgraphics/metricsgraphics.css">
 </head>
 
-<body>
-  <h2>Todo</h2>
-  <div ng-controller="TodoListController as todoList">
-    <span>{{remaining()}} of {{todos.length}} remaining</span>
-    <a href="" ng-click="archive()">archive</a> ]
-    <ul class="unstyled">
-      <li ng-repeat="todo in todos">
-        <label class="checkbox">
-          <input type="checkbox" ng-model="todo.done">
-          <span class="done-{{todo.done}}">{{todo.text}}</span>
-        </label>
-      </li>
-    </ul>
-    <form ng-submit="addTodo()">
-      <input type="text" ng-model="todoText" size="30" placeholder="add new todo here">
-      <input class="btn-primary" type="submit" value="add">
-    </form>
+<body ng-controller="mainController as vm">
+  <div class="top-section-decoration-element">
   </div>
+  <!-- main-container allows to keep the cool background while centering the box  -->
+  <div class="main-container">
+    <div class="navbar">
+      <div class="navbar__logo-and-text">
+        <img style="width:60px; height:60px; margin-right: 15px;" src="static/public/img/logo_white.png">
+        <h2>Propheteer</h2>
+      </div>
+      <div class="navbar__wrapper">
+        <div class="nav-button--std">
+          Features
+        </div>
+        <div class="nav-button--std">
+          Project
+        </div>
+        <div class="nav-button--std">
+          Pricing
+        </div>
+        <div class="nav-button--std">
+          Login
+        </div>
+        <div class="nav-button--sign-up">
+          Sign Up
+        </div>
+      </div>
+    </div>
+    <div class="steps-box">
+      <div ng-if="vm.currentState === vm.possibleStates.loading" class="spinner-container">
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+        <span class="loading-indicator__text" ng-if="vm.processing">{{vm.processingText}}</span>
+      </div>
+      <div class="welcome-step" ng-if="vm.currentState === vm.possibleStates.welcome">
+        <span class="emoji-filler">🚀📈🤑</span>
+        <div class="welcome-title">Forecast. Like a Data Scientist.</div>
+        <div class="welcome-step__text-box">
+          Predict sales, subscribers, website visits or anything in between like data scientists do. Propheteer is a fast, accurate, and automatic time series forecasting tool specifically designed for small businesses without a dedicated data team.
+        </div>
+        <div class="get-started-button" ng-click="vm.getStarted()">
+          Get Started
+        </div>
+      </div>
+      <div class="step" ng-if="vm.currentState === vm.possibleStates.upload">
+        <div class="step-title">Upload you data! 🚀</div>
+        <div class="upload-step__text-box">Make sure you have a column with date in YYYY-MM-DD format, and another column with the variable you want to predict. We support .csv, .xsl and .xlsx. </div>
+        <div class="drop-zone" nv-file-drop uploader="vm.uploader" ng-if="!vm.uploader.queue.length">
+          <span class="emoji-filler">📤</span>
+          <div class="drop-zone__prompt">Drop you file</div>
+          <div class="drop-zone__sub-prompt" ng-click="vm.openFileSelector()">or <u>click</u> to browse</div>
+          <input type="file" id="file-input" nv-file-select uploader="vm.uploader" style="display: none">
+        </div>
+        <div class="drop-zone" ng-if="vm.uploader.queue.length">
+          <span class="emoji-filler">🤘</span>
+          <div class="drop-zone__prompt">Great, your file is ready to upload!</div>
+          <div class="drop-zone__sub-prompt">{{vm.uploader.queue[0].file.name}}</div>
+          <div class="upload-button" ng-click="vm.uploader.queue[0].upload()">
+            Upload
+          </div>
+          <div class="drop-zone__sub-prompt" ng-click="vm.uploader.clearQueue()">or <u>click</u> to select another file</div>
+        </div>
+        <div class="step-indicator-container">
+          <div class="indicator" ng-class="{'indicator--active': !vm.uploader.queue.length}"></div>
+          <div class="indicator" ng-class="{'indicator--active': vm.uploader.queue.length}"></div>
+          <div class="indicator"></div>
+        </div>
+      </div>
+      <div class="step" ng-if="vm.currentState === vm.possibleStates.uploaded">
+        <div class="step-title"> Let's review! 📈</div>
+        <div class="uploaded-step__text-box">Almost there! Let's take a look at a summary of your data, and select the date columns and target column.</div>
+        <div class="uploaded-step__summary-container">
+          <div class="summary-item">
+            <div class="summary-item__description">ROWS</div>
+            <div class="summary-item__value">{{vm.prophetModel.data.length}}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">COLUMNS</div>
+            <div class="summary-item__value">{{vm.columnOptions.length}}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">FILE NAME</div>
+            <div class="summary-item__value">{{ vm.uploader.queue[0].file.name }}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">FILE SIZE</div>
+            <div class="summary-item__value">{{ vm.uploader.queue[0].file.size/1024/1024|number:2 }} MB</div>
+          </div>
+        </div>
+        <div class="variable-select-container" ng-class="{'variable-select-container--warning': vm.warnSelection}">
+          <div class="select-container">
+            <label for="dateSelect" class="select-label"> 📅 Set you date column: </label><br>
+            <select name="dateSelect" id="dateSelect" ng-model="vm.prophetModel.dateVariable">
+              <option value="">--Please select a value--</option>
+              <option ng-repeat="option in vm.columnOptions" value="{{option}}">{{option}}</option>
+            </select>    
+          </div>
+          <div class="select-container">
+            <label for="targetSelect" class="select-label">🎯 Choose you target variable: </label><br>
+            <select name="targetSelect" id="targetSelect" ng-model="vm.prophetModel.targetVariable">
+              <option value="">--Please select a value--</option>
+              <option ng-repeat="option in vm.columnOptions" value="{{option}}">{{option}}</option>
+            </select>
+          </div>
+          <div class="select-container">
+            <label for="targetSelect" class="select-label">⚙️ Enter your target units: </label><br>
+            <input type="text" maxlength="10" placeholder="i.e. €, $, visits..." name="targetSelect" id="targetSelect" ng-model="vm.prophetModel.targetUnits">
+            </input>
+          </div>
+        </div>
+        <div class="predict-button" ng-click="vm.runPrediction()">
+          Predict
+        </div>
+        <div class="step-indicator-container">
+          <div class="indicator"></div>
+          <div class="indicator"></div>
+          <div class="indicator indicator--active"></div>
+        </div>
+      </div>
+      <div class="step" ng-if="vm.currentState === vm.possibleStates.done">
+        <div class="step-title"> Success! 🤑</div>
+        <div class="success-step__summary-container">
+          <div class="summary-item">
+            <div class="summary-item__description">AVGERAGE</div>
+            <div class="summary-item__value">{{vm.prophetModel.mean | number : 2}}{{vm.prophetModel.targetUnits}}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">MEDIAN</div>
+            <div class="summary-item__value">{{vm.prophetModel.median | number : 2}}{{vm.prophetModel.targetUnits}}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">MINIMUM</div>
+            <div class="summary-item__value">{{vm.prophetModel.min | number : 2}}{{vm.prophetModel.targetUnits}}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-item__description">MAXIMUM</div>
+            <div class="summary-item__value">{{vm.prophetModel.max | number : 2}}{{vm.prophetModel.targetUnits}}</div>
+          </div>
+        </div>
+        <div id="chart"></div>
+      </div>
+      <div ng-show="false">
+        <input type="file" nv-file-drop uploader="vm.uploader">
+        <input type="file" nv-file-select uploader='vm.uploader'/><br/>
+          <ul>
+            <li ng-repeat="item in vm.uploader.queue">
+              Name: <span ng-bind="item.file.name"></span><br/>
+              <button ng-click="item.upload()">upload</button>
+            </li>
+          </ul>
+        <div>
+          <label for="dateSelect"> Select date column: </label><br>
+          <select name="dateSelect" id="dateSelect" ng-model="vm.prophetModel.dateVariable">
+            <option value="">--Please select a value--</option>
+            <option ng-repeat="option in vm.columnOptions" value="{{option}}">{{option}}</option>
+          </select><br>
+          <label for="targetSelect"> Select prediction column: </label><br>
+          <select name="targetSelect" id="targetSelect" ng-model="vm.prophetModel.targetVariable">
+            <option value="">--Please select a value--</option>
+            <option ng-repeat="option in vm.columnOptions" value="{{option}}">{{option}}</option>
+          </select>
+        </div>
+        <div style="background-color: blue; color: white; width: 100px; cursor: pointer" ng-click="vm.runPrediction()">
+          Let's Go
+        </div>
+        
+      </div>
+    </div>
+    <div class="footer">
+      <span>Made with ️❤️in Madrid</span>
+    </div> 
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="static/libs/angular-file-upload/angular-file-upload.min.js"></script>
+  <script type="text/javascript" src="static/app.js"></script>
+  <script type="text/javascript" src="static/controllers/main-controller.js"></script>
+  <script type="text/javascript" src="static/services/prophetSvc.js"></script>
 </body>
 
 </html>
